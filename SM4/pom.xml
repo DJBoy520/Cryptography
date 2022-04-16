@@ -18,5 +18,11 @@
             <artifactId>hutool-crypto</artifactId>
             <version>5.7.15</version>
         </dependency>
+        <dependency>
+            <groupId>org.jetbrains</groupId>
+            <artifactId>annotations</artifactId>
+            <version>RELEASE</version>
+            <scope>compile</scope>
+        </dependency>
     </dependencies>
 </project>
