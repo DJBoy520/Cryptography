@@ -5,13 +5,13 @@
 #ifndef SM4_CPP_SM4_H
 #define SM4_CPP_SM4_H
 
-
 class SM4 {
-/*系统参数*/
+
 private:
+    /*系统参数*/
     unsigned long FK[4] = {0xa3b1bac6, 0x56aa3350, 0x677d9197, 0xb27022dc};
 
-/*固定参数*/
+    /*固定参数*/
     unsigned long CK[32] =
             {
                     0x00070e15, 0x1c232a31, 0x383f464d, 0x545b6269,
@@ -46,16 +46,28 @@ private:
             };
 
     unsigned long rK[32];
-
     unsigned char key[16];
     unsigned char IV[16];
     unsigned char CTR[16];
 
+    /*!
+     *
+     * @param char0
+     * @param char1
+     * @param char2
+     * @param char3
+     * @return 四个字节从高到低组合起来的unsigned long数据，此处仅赋值低4字节
+     */
     unsigned long charToLong(unsigned char char0, unsigned char char1, unsigned char char2, unsigned char char3) {
         unsigned long t = (char0 << 24) | (char1 << 16) | (char2 << 8) | (char3);
         return (char0 << 24) | (char1 << 16) | (char2 << 8) | (char3);
     }
 
+    /*!
+     *
+     * @param input 待拆解的unsigned long数据，拆解此项的低4字节，unsigned long在不同编译器下字节长度不同，可能有4或8个字节
+     * @param b 待返回的拆解后的字节数组的指针
+     */
     void LongTochar(unsigned long input, unsigned char *b) {
         b[0] = (input >> 24) & 0xff;
         b[1] = (input >> 16) & 0xff;
@@ -63,10 +75,21 @@ private:
         b[3] = (input) & 0xff;
     }
 
+    /*!
+     *
+     * @param input 有待循环左移的unsigned long数据，此函数将input看成4字节进行操作
+     * @param n 循环左移的位数
+     * @return input循环左移n位后的数据，无符号位
+     */
     unsigned long shiftLeft(unsigned long input, int n) {
         return ((input << n) & 0xffffffff) | (input >> (32 - n));
     }
 
+    /*!
+     *
+     * @param input 输入的unsigned long数据，此处仅操作其低4字节数据
+     * @return
+     */
     unsigned long sBox(unsigned long input) {
         int i = 0;
         unsigned char temp[4];
@@ -77,6 +100,10 @@ private:
         return charToLong(temp[0], temp[1], temp[2], temp[3]);
     }
 
+    /*!
+     *
+     * @param key 用户输入的初始化key，可通过构造函数 或 setKey函数设置
+     */
     void keyGenerate(unsigned char *key) {
         int i = 0;
         unsigned long key_circle[4];
@@ -96,7 +123,12 @@ private:
         }
     }
 
-    //plaintext    ciphertext
+    /*!
+     *
+     * @param inputText 待操作的数据的指针
+     * @param outputText 待返回的数据的指针
+     * @param mode sm4操作模式，mode=0加密；mode=1解密
+     */
     void sm4Main(unsigned char *inputText, unsigned char *outputText, int mode) {
         int i = 0;
         unsigned long X_circle[4];
@@ -126,6 +158,12 @@ private:
         }
     }
 
+    /*!
+     *
+     * @param src 待截取的原字节数组的首指针
+     * @param dst 存放截取后的字节数组的首指针
+     * @param len 待截取的数据的长度
+     */
     void subCharArray(unsigned char *src, unsigned char *dst, unsigned long len) {
         if (dst == nullptr || src == nullptr) {
             return;
@@ -135,6 +173,12 @@ private:
         }
     }
 
+    /*!
+     *
+     * @param src 待填充的原始数据指针
+     * @param dst 待返回的 填充过的数据的指针
+     * @param len_padding 需要填充的数据的长度
+     */
     void PKCS7(unsigned char *src, unsigned char *dst, unsigned long len_padding) {
         unsigned char c = len_padding;
         for (int i = 0; i < 16 - len_padding; i++) {
@@ -145,8 +189,13 @@ private:
         }
     }
 
-    //根据现有的CTRin，产生CTRout=CTRin+index位置的ctr，这是个相对位置,
-    //此处对unsigned long字节数敏感，所以使用了unsigned long long，在各种编译器上，都是8字节
+    /*!
+     * 根据现有的CTRin，产生CTRout=CTRin+index位置的ctr，这是个相对位置,
+     * 此处对unsigned long字节数敏感，所以使用了unsigned long long，在各种编译器上，都是8字节
+     * @param CTRin 原始的ctr计数指针
+     * @param CTRout 计算过ctr+index后返回的数据的指针
+     * @param index 原始的ctr计数指针需要增加的数值
+     */
     void generateCTR(unsigned char *CTRin, unsigned char *CTRout, unsigned long long index) {
         unsigned char index_char[8], flag_carry = 0, temp;
         LongTochar(index >> 32, index_char);
@@ -161,6 +210,10 @@ private:
 public:
     SM4();
 
+    /*!
+     *
+     * @param key 加解密密钥
+     */
     SM4(unsigned char *key) {
         for (int i = 0; i < 16; i++) {
             this->key[i] = key[i];
@@ -168,6 +221,11 @@ public:
         keyGenerate(this->key);
     };
 
+    /*!
+     *
+     * @param key 加解密密钥
+     * @param IV 初始化向量
+     */
     SM4(unsigned char *key, unsigned char *IV) {
         for (int i = 0; i < 16; i++) {
             this->key[i] = key[i];
@@ -176,6 +234,10 @@ public:
         keyGenerate(this->key);
     }
 
+    /*!
+     *
+     * @param key 加解密密钥
+     */
     void setKey(unsigned char *key) {
         for (int i = 0; i < 16; i++) {
             this->key[i] = key[i];
@@ -183,26 +245,51 @@ public:
         keyGenerate(this->key);
     }
 
+    /*!
+     *
+     * @param IV 初始化向量
+     */
     void setIV(unsigned char *IV) {
         for (int i = 0; i < 16; i++) {
             this->IV[i] = IV[i];
         }
     }
 
+    /*!
+     *
+     * @param CTR ctr分组加密模式计数器
+     */
     void setCTR(unsigned char *CTR) {
         for (int i = 0; i < 16; i++) {
             this->CTR[i] = CTR[i];
         }
     }
 
+    /*!
+     *
+     * @param plaintext 待加密的数据的指针
+     * @param ciphertext 存放待返回的数据的指针
+     */
     void encrypt(unsigned char *plaintext, unsigned char *ciphertext) {
         sm4Main(plaintext, ciphertext, 0);
     }
 
+    /*!
+     *
+     * @param ciphertext 待解密的数据的指针
+     * @param plaintext 存放待返回的明文的指针
+     */
     void decrypt(unsigned char *ciphertext, unsigned char *plaintext) {
         sm4Main(ciphertext, plaintext, 1);
     }
 
+    /*!
+     *
+     * @param plaintext 用户输入的明文分组的指针
+     * @param ciphertext 待返回的密文分组的指针
+     * @param plaintextLen 指定的明文分组长度
+     * @param ciphertextLen 待返回的密文分组长度 的指针
+     */
     void SM4_ECB_Encrypt(unsigned char *plaintext, unsigned char *ciphertext, unsigned long plaintextLen,
                          unsigned long *ciphertextLen) {
         unsigned long len_padding = 16 - plaintextLen % 16;
@@ -223,7 +310,13 @@ public:
         *ciphertextLen = (*ciphertextLen) + 16;
     }
 
-    //plaintextLen为返回的  解密后的明文的长度
+    /*!
+     *
+     * @param ciphertext    用户输入密文分组的指针
+     * @param plaintext     待返回的明文分组的指针
+     * @param ciphertextLen     指定的密文分组长度
+     * @param plaintextLen  待返回的明文分组长度 的指针
+     */
     void SM4_ECB_Decrypt(unsigned char *ciphertext, unsigned char *plaintext, unsigned long ciphertextLen,
                          unsigned long *plaintextLen) {
         int index = 0;
@@ -236,6 +329,13 @@ public:
         *plaintextLen = ciphertextLen - temp1[15];
     }
 
+    /*!
+     *
+     * @param plaintext 用户输入的明文分组的指针
+     * @param ciphertext 待返回的密文分组的指针
+     * @param plaintextLen 指定的明文分组长度
+     * @param ciphertextLen 待返回的密文分组长度 的指针
+     */
     void SM4_CBC_Encrypt(unsigned char *plaintext, unsigned char *ciphertext, unsigned long plaintextLen,
                          unsigned long *ciphertextLen) {
         unsigned long len_padding = 16 - plaintextLen % 16;
@@ -266,6 +366,13 @@ public:
         *ciphertextLen = (*ciphertextLen) + 16;
     }
 
+    /*!
+     *
+     * @param ciphertext    用户输入密文分组的指针
+     * @param plaintext     待返回的明文分组的指针
+     * @param ciphertextLen     指定的密文分组长度
+     * @param plaintextLen  待返回的明文分组长度 的指针
+     */
     void SM4_CBC_Decrypt(unsigned char *ciphertext, unsigned char *plaintext, unsigned long ciphertextLen,
                          unsigned long *plaintextLen) {
         int index = 0;
@@ -283,6 +390,13 @@ public:
         *plaintextLen = ciphertextLen - temp1[15];
     }
 
+    /*!
+     *
+     * @param plaintext 用户输入的明文分组的指针
+     * @param ciphertext 待返回的密文分组的指针
+     * @param plaintextLen 指定的明文分组长度
+     * @param ciphertextLen 待返回的密文分组长度 的指针
+     */
     void SM4_CFB_Encrypt(unsigned char *plaintext, unsigned char *ciphertext, unsigned long plaintextLen,
                          unsigned long *ciphertextLen) {
         unsigned long len_padding = 16 - plaintextLen % 16;
@@ -311,6 +425,13 @@ public:
         *ciphertextLen = (*ciphertextLen) + 16;
     }
 
+    /*!
+     *
+     * @param ciphertext    用户输入密文分组的指针
+     * @param plaintext     待返回的明文分组的指针
+     * @param ciphertextLen 指定的密文分组长度
+     * @param plaintextLen  待返回的明文分组长度 的指针
+     */
     void SM4_CFB_Decrypt(unsigned char *ciphertext, unsigned char *plaintext, unsigned long ciphertextLen,
                          unsigned long *plaintextLen) {
         int index = 0;
@@ -330,6 +451,13 @@ public:
         *plaintextLen = (*plaintextLen) - temp1[15];
     }
 
+    /*!
+     *
+     * @param plaintext 用户输入的明文分组的指针
+     * @param ciphertext 待返回的密文分组的指针
+     * @param plaintextLen 指定的明文分组长度
+     * @param ciphertextLen 待返回的密文分组长度 的指针
+     */
     void SM4_OFB_Encrypt(unsigned char *plaintext, unsigned char *ciphertext, unsigned long plaintextLen,
                          unsigned long *ciphertextLen) {
         unsigned long len_padding = 16 - plaintextLen % 16;
@@ -358,6 +486,13 @@ public:
         *ciphertextLen = (*ciphertextLen) + 16;
     }
 
+    /*!
+     *
+     * @param ciphertext    用户输入密文分组的指针
+     * @param plaintext     待返回的明文分组的指针
+     * @param ciphertextLen     指定的密文分组长度
+     * @param plaintextLen  待返回的明文分组长度 的指针
+     */
     void SM4_OFB_Decrypt(unsigned char *ciphertext, unsigned char *plaintext, unsigned long ciphertextLen,
                          unsigned long *plaintextLen) {
         int index = 0;
@@ -377,7 +512,13 @@ public:
         *plaintextLen = (*plaintextLen) - temp2[15];
     }
 
-    //CTR是用户传来，用以替代IV的计数器
+    /*!
+     *
+     * @param plaintext 用户输入的明文分组的指针
+     * @param ciphertext 待返回的密文分组的指针
+     * @param plaintextLen 指定的明文分组长度
+     * @param ciphertextLen 待返回的密文分组长度 的指针
+     */
     void SM4_CTR_Encrypt(unsigned char *plaintext, unsigned char *ciphertext, unsigned long plaintextLen,
                          unsigned long *ciphertextLen) {
         unsigned long len_padding = 16 - plaintextLen % 16;
@@ -406,6 +547,13 @@ public:
         *ciphertextLen = (*ciphertextLen) + 16;
     }
 
+    /*!
+     *
+     * @param ciphertext    用户输入密文分组的指针
+     * @param plaintext     待返回的明文分组的指针
+     * @param ciphertextLen     指定的密文分组长度
+     * @param plaintextLen  待返回的明文分组长度 的指针
+     */
     void SM4_CTR_Decrypt(unsigned char *ciphertext, unsigned char *plaintext, unsigned long ciphertextLen,
                          unsigned long *plaintextLen) {
         int index = 0;
