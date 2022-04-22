@@ -5,7 +5,7 @@
   </component>
   <component name="CMakeRunConfigurationManager">
     <generated>
-      <config projectName="SM4_C_clion" targetName="SM4_C_clion" />
+      <config projectName="sm4_cpp" targetName="sm4_cpp" />
     </generated>
   </component>
   <component name="CMakeSettings">
@@ -14,7 +14,7 @@
     </configurations>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0b172f0a-2fa3-4ee7-afb4-2a7c59b5421c" name="Changes" comment="" />
+    <list default="true" id="52ad498d-cabe-48b2-b3a1-c9bef7f8de16" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -35,27 +35,32 @@
     <option name="majorVersion" value="2022" />
     <option name="minorVersion" value="1" />
   </component>
-  <component name="ProjectId" id="27x9TwUu4B9c0NDxsQm83tbUx0C" />
+  <component name="ProjectId" id="286NjUkRcAwkaGdQs34QPEgZwlG" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RunOnceActivity.cidr.known.project.marker&quot;: &quot;true&quot;,
-    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
-    &quot;cf.first.check.clang-format&quot;: &quot;false&quot;,
-    &quot;cidr.known.project.marker&quot;: &quot;true&quot;,
-    &quot;cmake.loaded.for.project&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.cidr.known.project.marker": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "cf.first.check.clang-format": "false",
+    "cidr.known.project.marker": "true",
+    "cmake.loaded.for.project": "true",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)"
   }
-}</component>
+}]]></component>
   <component name="RunManager">
-    <configuration name="SM4_C_clion" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="SM4_C_clion" TARGET_NAME="SM4_C_clion" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="SM4_C_clion" RUN_TARGET_NAME="SM4_C_clion">
+    <configuration default="true" type="CLionExternalRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true">
+      <method v="2">
+        <option name="CLION.EXTERNAL.BUILD" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="sm4_cpp" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="sm4_cpp" TARGET_NAME="sm4_cpp" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="sm4_cpp" RUN_TARGET_NAME="sm4_cpp">
       <method v="2">
         <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
       </method>
@@ -64,34 +69,44 @@
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="0b172f0a-2fa3-4ee7-afb4-2a7c59b5421c" name="Changes" comment="" />
-      <created>1650250881405</created>
+      <changelist id="52ad498d-cabe-48b2-b3a1-c9bef7f8de16" name="Changes" comment="" />
+      <created>1650533210248</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
-      <updated>1650250881405</updated>
-      <workItem from="1650250884335" duration="7676000" />
-      <workItem from="1650266031621" duration="1585000" />
-      <workItem from="1650267713296" duration="45000" />
-      <workItem from="1650532918364" duration="1281000" />
+      <updated>1650533210248</updated>
+      <workItem from="1650533211911" duration="25827000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
   </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
-          <url>file://$PROJECT_DIR$/main.c</url>
-          <line>140</line>
-          <option name="timeStamp" value="17" />
+          <url>file://$PROJECT_DIR$/main.cpp</url>
+          <line>33</line>
+          <option name="timeStamp" value="49" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
     <watches-manager>
       <configuration name="CMakeRunConfiguration">
-        <watch expression="rK" language="ObjectiveC" />
+        <watch expression="ciphertextLen" />
+        <watch expression="*ciphertextLen" language="ObjectiveC" />
+        <watch expression="*ciphertext @ 64" />
       </configuration>
     </watches-manager>
   </component>
